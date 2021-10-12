@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.days.moment.qna.mapper.QnaMapper">
+
+    <sql id="search">-- sql flagment sql문 조각내기
+        <foreach collection="arr" item="item" separator=" OR " open="WHERE (" close=")">
+            <if test="item == 'T'.toString()">
+                qna_title like concat('%', #{keyword}, '%')
+            </if>
+            <if test="item == 'C'.toString()">
+                qna_content like concat('%', #{keyword}, '%')
+            </if>
+            <if test="item == 'W'.toString()">
+                qna_writer like concat('%', #{keyword}, '%')
+            </if>
+        </foreach>
+    </sql>
+
+    <insert id="insert">
+        insert into qna (qna_title, qna_content, qna_writer, qna_answer_email, origin_id)
+        values (#{qnaTitle}, #{qnaContent}, #{qnaWriter}, #{qnaAnswerEmail} , #{originId});
+        <selectKey order="AFTER" resultType="Long" keyProperty="qnaId">
+            select last_insert_id()
+        </selectKey>
+    </insert>
+
+    <update id="originUpdate">
+        update qna set origin_id = qna_id where qna.qna_id = last_insert_id()
+    </update>
+
+    <update id="answerUpdate">
+        update qna set origin_id = #{originId} where qna.qna_id = last_insert_id()
+    </update>
+
+
+    <select id="getList" resultType="com.days.moment.qna.domain.Qna">
+        select
+        qna_id as qnaID,
+        qna_title as qnaTitle,
+        qna_content as qnaContent,
+        qna_writer as qnaWriter,
+        qna_answer_email as qnaAnswerEmail,
+        qna_regdate as qnaRegDate,
+        origin_id as originId
+        from qna
+
+        <include refid="search"></include> -- search문 삽입
+
+        order by origin_id desc, qna_id asc limit #{skip}, #{size}
+    </select>
+
+    <select id="getCount" resultType="int">
+        select count(qna_id) from qna
+
+        <include refid="search"></include> -- search문 삽입
+    </select>
+
+    <resultMap id="qnaMap" type="com.days.moment.qna.domain.Qna">
+        <id property="qnaId" column="qna_id"></id>
+        <result property="qnaTitle" column="qna_title"></result>
+        <result property="qnaContent" column="qna_content"></result>
+        <result property="qnaWriter" column="qna_writer"></result>
+        <result property="qnaAnswerEmail" column="qna_answer_email"></result>
+        <result property="qnaRegDate" column="qna_regDate"></result>
+        <result property="originId" column="origin_id"></result>
+    </resultMap>
+
+    <select id="select" resultMap="qnaMap">
+        select * from qna
+        where qna.qna_id = #{qnaId}
+    </select>
+
+    <delete id="delete">
+        delete from qna where qna_id = #{qnaId}
+    </delete>
+
+
+</mapper>

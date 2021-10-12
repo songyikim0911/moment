@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.days.moment.miniboard.mapper.MiniMapper">
+
+    <sql id="search">-- sql flagment sql문 조각내기
+        <foreach collection="arr" item="item" separator=" OR " open="WHERE (" close=")">
+            <if test="item == 'C'.toString()">
+                mb_content like concat('%', #{keyword}, '%')
+            </if>
+            <if test="item == 'W'.toString()">
+                mb_writer like concat('%', #{keyword}, '%')
+            </if>
+        </foreach>
+    </sql>
+
+    <insert id="insert">
+        insert into mini_board (mb_title, mb_content, mb_writer)
+        values (#{mbTitle}, #{mbContent}, #{mbWriter})
+        <selectKey order="AFTER" resultType="Long" keyProperty="mbNo">
+            select last_insert_id()
+        </selectKey>
+    </insert>
+
+
+    <select id="getList" resultType="com.days.moment.miniboard.domain.Mini">
+        select
+        mb_no as mbNo,
+        mb_title as mbTitle,
+        mb_content as mbContent,
+        mb_writer as mbWriter,
+        mb_regDate as mbRegDate,
+        mb_re_count as mbReCount
+        from mini_board
+
+        <include refid="search"></include> -- search문 삽입
+
+        order by mb_no desc limit #{skip}, #{size}
+    </select>
+
+    <select id="getCount" resultType="int">
+        select count(mb_no) from mini_board
+
+        <include refid="search"></include> -- search문 삽입
+    </select>
+
+    <resultMap id="miniBoardMap" type="com.days.moment.miniboard.domain.Mini">
+        <id property="mbNo" column="mb_no"></id>
+        <result property="mbTitle" column="mb_title"></result>
+        <result property="mbContent" column="mb_content"></result>
+        <result property="mbWriter" column="mb_writer"></result>
+        <result property="mbRegDate" column="mb_regDate"></result>
+        <result property="mbReCount" column="mb_re_count"></result>
+        <collection property="attachList" resultMap="attachMap"></collection>
+    </resultMap>
+
+    <resultMap id="attachMap" type="com.days.moment.miniboard.domain.MiniAttach">
+        <result property="uuid" column="uuid"></result>
+        <result property="mbNo" column="mb_no"></result>
+        <result property="fileName" column="fileName"></result>
+        <result property="path" column="path"></result>
+        <result property="image" column="image"></result>
+    </resultMap>
+
+    <select id="select" resultMap="miniBoardMap">
+        select *
+        from
+            mini_board mini left join mini_board_attach mba on mini.mb_no = mba.mb_no
+        where mini.mb_no = #{mbNo}
+    </select>
+
+    <delete id="delete">
+        delete from mini_board where mb_no = #{mbNo}
+    </delete>
+
+    <update id="update">
+        update mini_board set mb_title = #{mbTitle}, mb_content = #{mbContent}, mb_modDate = now()
+        where mb_no = #{mbNo}
+    </update>
+
+    <update id="updateReplyCnt">
+        update mini_board set mb_re_count = mb_re_count + #{num} where mb_no = #{mbNo}
+    </update>
+
+    <insert id="insertAttach">
+        insert into mini_board_attach (uuid, mb_no, fileName, path, image)
+        values (#{uuid}, #{mbNo}, #{fileName}, #{path}, #{image})
+    </insert>
+
+    <delete id="deleteAttach">
+        delete from mini_board_attach where mb_no = #{mbNo}
+
+    </delete>
+
+
+</mapper>

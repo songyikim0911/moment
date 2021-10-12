@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.days.moment.notice.mapper.NoticeMapper">
+
+    <sql id="search">
+        <if test="type != null">
+            <foreach collection="arr" item="item" separator=" OR " open="WHERE (" close=")">
+                <if test="item == 'T'.toString()">
+                    notice_title like concat('%', #{keyword}, '%')
+                </if>
+                <if test="item == 'C'.toString()">
+                    notice_content like concat('%', #{keyword}, '%')
+                </if>
+            </foreach>
+        </if>
+    </sql>
+
+    <insert id ="insert">
+        insert into notice(notice_title, notice_content)
+        values(#{noticeTitle}, #{noticeContent})
+
+        <selectKey order="AFTER" resultType="long" keyProperty="noticeNo">
+            select last_insert_id()
+        </selectKey>
+    </insert>
+
+    <select id="getList" resultType="com.days.moment.notice.domain.Notice">
+        select
+        notice_no as noticeNo,
+        notice_title as noticeTitle,
+        notice_content as noticeContent,
+        notice_regdate as noticeRegDate
+        from notice
+        <include refid="search"></include>
+        order by notice_no desc limit #{skip},#{size}
+    </select>
+
+    <select id="getCount" resultType="int">
+        select count(notice_no) from notice
+        <include refid="search"></include>
+    </select>
+
+    <resultMap id="noticeMap" type="com.days.moment.notice.domain.Notice">
+        <id property="noticeNo" column="notice_no"></id>
+        <result property="noticeTitle" column="notice_title"></result>
+        <result property="noticeContent" column="notice_content"></result>
+        <result property="noticeRegDate" column="notice_regdate"></result>
+        <collection property="attachList" resultMap="attachMap"></collection>
+    </resultMap>
+
+    <resultMap id="attachMap" type="com.days.moment.notice.domain.NoticeAttach">
+        <result property="uuid" column="uuid"></result>
+        <result property="noticeNo" column="notice_no"></result>
+        <result property="path" column="path"></result>
+        <result property="fileName" column="fileName"></result>
+        <result property="image" column="image"></result>
+    </resultMap>
+
+    <select id="select" resultMap="noticeMap">
+        select * from notice notice left join notice_pic na on notice.notice_no = na.notice_no
+        where notice.notice_no = #{noticeNo}
+    </select>
+
+    <insert id="insertAttach">
+        insert into notice_pic(uuid, notice_no, fileName, path, image)
+        values(#{uuid}, #{noticeNo}, #{fileName}, #{path}, #{image})
+    </insert>
+
+    <update id="update">
+        update notice set notice_title =#{noticeTitle}, notice_content=#{noticeContent}
+        where notice_no=#{noticeNo}
+    </update>
+
+    <update id="deleteAttach">
+        delete from notice_pic where notice_no=#{noticeNo}
+    </update>
+
+    <delete id="delete">
+        delete from notice where notice_no = #{noticeNo}
+    </delete>
+
+</mapper>

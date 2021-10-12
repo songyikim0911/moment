@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.days.moment.miniboard.mapper.ReplyMapper">
+
+    <insert id="insert">
+        insert into mini_board_reply (mb_no, mb_re_content, mb_re_writer, origin_re_no)
+        values (#{mbNo}, #{mbReContent}, #{mbReWriter}, #{originReNo})
+        <selectKey order="AFTER" resultType="Long" keyProperty="mbReNo">
+            select last_insert_id()
+        </selectKey>
+    </insert>
+
+    <select id="getListWithMini" resultType="com.days.moment.miniboard.domain.Reply">
+        select
+        mb_re_no as mbReNo,
+        mb_no as mbNo,
+        mb_re_writer as mbReWriter,
+        mb_re_content as mbReContent,
+        mb_re_regDate as mbReRegDate,
+        mb_re_modDate as mbReModDate,
+        origin_re_no as originReNo,
+        re_depth as reDepth
+        from mini_board_reply
+        where mb_no = #{mbNo}
+        order by origin_re_no asc, mb_re_no asc limit #{pageRequestDTO.skip}, #{pageRequestDTO.size}
+    </select>
+
+    <select id="getCountByMbNo" resultType="int">
+        select count(mb_re_no) from mini_board_reply where mb_no = #{mbNo}
+    </select>
+
+    <update id="originUpdate">
+        update mini_board_reply set origin_re_no = mb_re_no where mini_board_reply.mb_re_no = last_insert_id()
+    </update>
+
+    <update id="answerUpdate">
+        update mini_board_reply set origin_re_no = #{originReNo}, re_depth =  if(#{reDepth} = 2, #{reDepth}, #{reDepth} + 1) where mini_board_reply.mb_re_no = last_insert_id()
+    </update>
+
+    <delete id="delete">
+        delete from mini_board_reply where mb_re_no = #{mbReNo}
+    </delete>
+
+    <update id="update">
+        update mini_board_reply set mb_re_content = #{mbReContent}, mb_re_modDate = now() where mb_re_no = #{mbReNo}
+    </update>
+
+
+
+</mapper>

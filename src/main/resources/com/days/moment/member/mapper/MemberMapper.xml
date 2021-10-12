@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.days.moment.member.mapper.MemberMapper">
+
+    <sql id="search">
+        <if test="type != null">
+        <foreach collection="arr" item="item" separator=" OR " open="WHERE (" close=")">
+        <if test="item == 'T'.toString()">
+         mem_id like concat('%', #{keyword}, '%')
+        </if>
+        </foreach>
+        </if>
+    </sql>
+
+    <update id="blockUser">
+        update member set mem_unblocked = 0 where mem_id=#{memId}
+    </update>
+
+    <update id="unBlockUser">
+        update member set mem_unblocked = 1 where mem_id=#{memId}
+    </update>
+
+    <insert id="insert">
+        insert into member (mem_id,mem_pwd,mem_nick,mem_birthday, mem_sex)
+        values(#{memId},#{memPwd},#{memNick},#{memBirthday},#{memSex})
+    </insert>
+
+    <insert id="insertRole">
+        insert into member_role (mem_id, role)
+        values(#{memId},#{role})
+    </insert>
+
+
+    <resultMap id="memberMap" type ="com.days.moment.member.domain.Member">
+        <id property="memId" column="mem_id"></id>
+        <result property="memPwd" column="mem_pwd"></result>
+        <result property="memNick" column="mem_nick"></result>
+        <result property="memBirthday" column="mem_birthday"></result>
+        <result property="enabled" column="enabled"></result>
+        <result property="memEmailCert" column="mem_email_cert"></result>
+        <result property="memSex" column="mem_sex"></result>
+        <result property="lastLogin" column="mem_lastlogin"></result>
+        <result property="memRegister" column="mem_register"></result>
+        <result property="memUnblocked" column="mem_unblocked"></result>
+        <collection property="roleList" resultMap="memberRoleMap"></collection>
+    </resultMap>
+
+    <resultMap id="memberRoleMap" type="com.days.moment.member.domain.MemberRole">
+        <result property="memId" column="mem_id"></result>
+        <result property="role" column="role"></result>
+    </resultMap>
+
+    <select id="findByMemId" resultMap="memberMap">
+        select * from member m inner join member_role mr on m.mem_id = mr.mem_id
+        where m.mem_id = #{memId}
+    </select>
+
+    <select id ="getCount" resultType="int">
+        select count(mem_id) from member
+    </select>
+
+    <select id="getList" resultType="com.days.moment.member.domain.Member">
+        select
+        mem_id as memId,
+        mem_pwd as memPwd,
+        mem_nick as memNick,
+        mem_sex as memSex,
+        mem_register as memRegister,
+        mem_birthday as memBirthday,
+        enabled as enabled,
+        mem_email_cert as memEmailCert,
+        mem_unblocked as memUnblocked
+        from member
+         <include refid="search"></include>
+        limit #{skip}, #{size}
+    </select>
+
+</mapper>

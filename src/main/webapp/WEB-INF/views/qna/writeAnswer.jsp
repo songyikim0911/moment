@@ -8,7 +8,7 @@
                 </div>
                 <div class="form-group">
                   <label for="exampleInputEmail2">작성자</label>
-                  <input type="text" name="qnaWriter" class="form-control" id="exampleInputEmail2" placeholder="Enter Writer" readonly value="email0@naver.com">
+                  <input type="text" name="qnaWriter" class="form-control" id="exampleInputEmail2" placeholder="Enter Writer" readonly value="<c:out value="${qnaDTO.qnaWriter}"></c:out>">
                 </div>
                 <div class="row">
                   <div class="col-sm-12">
@@ -21,7 +21,7 @@
                 </div>
                 <div class="form-group">
                   <label for="exampleInputEmail0">답변 이메일</label>
-                  <input type="text" name="qnaAnswerEmail" class="form-control" id="exampleInputEmail0" value="<c:out value="${qnaDTO.qnaWriter}"></c:out>">
+                  <input type="text" name="qnaAnswerEmail" class="form-control" id="exampleInputEmail0" readonly value="<c:out value="${qnaDTO.qnaAnswerEmail}"></c:out>">
                   <input type="hidden" name="originId" value="${qnaDTO.originId}">
                   <%--이메일 자동입력 변경 필요 --%>
                 </div>

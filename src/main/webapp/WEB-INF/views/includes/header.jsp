@@ -13,7 +13,7 @@
     <meta name="author" content="">
     <!-- Favicon icon -->
     <link rel="icon" type="image/png" sizes="16x16" href="/resources/assets/images/favicon.png">
-    <title>Matrix Template - The Ultimate Multipurpose admin template</title>
+    <title>- The Moments -</title>
     <!-- Custom CSS -->
     <link href="/resources/assets/libs/flot/css/float-chart.css" rel="stylesheet">
     <!-- Custom CSS -->

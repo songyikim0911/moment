@@ -1,6 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <footer class="footer text-center">
-    All Rights Reserved by Matrix-admin. Designed and Developed by <a href="https://wrappixel.com">WrapPixel</a>.
+    For unforgettable moments in your life. <a href="#">The Moments</a>.
 </footer>
 <!-- ============================================================== -->
 <!-- End footer -->

@@ -45,8 +45,8 @@
                                                     <tr>
                                                         <th style="width: 400px">내용</th>
 <%--                                                        <th>Writer</th>--%>
-                                                        <th>Writer</th>
-                                                        <th>RegDate</th>
+                                                        <th>작성자</th>
+                                                        <th>등록일</th>
                                                     </tr>
                                                     </thead>
                                                 <form id="form2">
@@ -58,7 +58,10 @@
                                                     <tr>
                                                         <td><a href="javascript:moveRead(${dto.mbNo})"><c:out value="${dto.mbTitle}[${dto.mbReCount}]"></c:out></a></td>
                                                         <td><c:out value="${dto.mbWriter}"></c:out></td>
-                                                        <td><c:out value="${dto.mbRegDate}"></c:out></td>
+                                                        <td>
+                                                            <fmt:parseDate value="${dto.mbRegDate}" pattern="yyyy-MM-dd'T'HH:mm:ss" var="parsedDateTime" type="both" />
+                                                            <fmt:formatDate pattern="yyyy-MM-dd" value="${parsedDateTime}"/>
+                                                        </td>
                                                     </tr>
                                                     </c:forEach>
                                                     </tbody>

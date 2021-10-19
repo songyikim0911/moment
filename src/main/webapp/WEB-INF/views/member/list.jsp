@@ -32,7 +32,7 @@
 
                     <div class="card">
                         <div class="card-header">
-                            <h3 class="card-title">목록</h3>
+                            <h3 class="card-title">회원 목록</h3>
                         </div>
                         <!-- /.card-header -->
                         <div class="card-body">
@@ -42,10 +42,10 @@
                                     <th style="width: 20px">ID(email)</th>
                                     <th>닉네임</th>
                                     <th>가입일</th>
-                                    <th>이메일주소</th>
+                                    <th>이메일인증</th>
                                     <th>생일</th>
                                     <th>성별</th>
-                                    <th>상태</th>
+                                    <th>계정상태</th>
                                     <th>차단상태</th>
                                     <th>활성화/차단</th>
                                 </tr>
@@ -58,7 +58,7 @@
                                         <td><c:out value="${dto.memId}"></c:out></td>
                                         <td><c:out value="${dto.memNick}"></c:out></td>
                                         <td><c:out value="${JoinDate}"></c:out></td>
-                                        <td><c:out value="${dto.memEmailCert}"></c:out></td>
+                                        <td>${dto.memEmailCert == true?"O":"X"}</td>
                                         <td><c:out value="${BirthDate}"></c:out></td>
                                         <td><c:out value="${dto.memSex}"></c:out></td>
                                        <c:choose>
@@ -90,28 +90,29 @@
                                 </c:forEach>
                                 </tbody>
                             </table>
-                            <form action ="/member/list" method="get">
+
+                            <form action="/member/list" method="get">
                                 <input type="hidden" name="page" value="1">
-                                <input type ="hidden" name="size" value="${pageMaker.size}">
+                                <input type="hidden" name="size" value="${pageMaker.size}">
                                 <div class="col-sm-3">
                                     <!-- select -->
-                                    <div class="form-group">
+                                    <div class="form-group-lg">
                                         <label>Search</label>
                                         <select name="type" class="custom-select">
                                             <option value="">----</option>
                                             <option value="T" ${pageRequestDTO.type=="T"?"selected":""}>아이디</option>
                                         </select>
-                                    </div>
-                                </div>
-                                <div class="col-sm-9">
-                                    <div class="input-group input-group-sm">
-                                        <input type="text" class="form-control" name="keyword" value="${pageRequestDTO.keyword}">
-                                        <span class="input-group-append"><button type="submit" class="btn btn-info btn-flat">Go!</button></span>
+                                        <div class="input-group input-group-sm">
+                                            <input type="text" class="form-control" name="keyword"
+                                                   value="${pageRequestDTO.keyword}">
+                                            <span class="input-group-append">
+                                            <button type="submit" class="btn btn-info btn-flat">Go!</button>
+                                            </span>
+                                        </div>
                                     </div>
                                 </div>
                             </form>
 
-                        </div>
                             <!-- /.card-body -->
 
 

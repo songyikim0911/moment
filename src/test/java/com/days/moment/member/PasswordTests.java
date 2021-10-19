@@ -54,7 +54,7 @@ public class PasswordTests {
     public void insertMember(){
 
         //insert into tbl_member(mid, mpw, mname) values ('mid', 'mpw', 'mname');->문자열로 만들어야함.
-        String query = "insert into member(mem_id, mem_pwd, mem_name) values ('v1', 'v2', 'v3');";
+        String query = "insert into member(mem_id, mem_pwd, mem_nick, ) values ('v1', 'v2', 'v3');";
 
         for(int i = 0; i < 10; i ++){
 

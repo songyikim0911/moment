@@ -18,7 +18,7 @@ import java.util.stream.IntStream;
 @ContextConfiguration( classes = {QnaRootConfig.class, RootConfig.class})
 public class QnaMapperTests {
 
-    @Autowired
+    @Autowired(required = false)
     QnaMapper qnaMapper;
 
     @Test
@@ -26,8 +26,8 @@ public class QnaMapperTests {
 
         IntStream.rangeClosed(0, 9).forEach(i -> {
             Qna qna = Qna.builder()
-                    .qnaTitle("title" + i)
-                    .qnaContent("content" + i)
+                    .qnaTitle("문의드립니다." + i + i + i)
+                    .qnaContent("문의내용" + i)
                     .qnaWriter("email"+i+"@naver.com")
                     .qnaAnswerEmail("email"+i+"@naver.com")
                     .build();

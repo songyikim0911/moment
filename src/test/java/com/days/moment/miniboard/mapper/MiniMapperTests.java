@@ -30,8 +30,8 @@ public class MiniMapperTests {
 
         IntStream.rangeClosed(0, 9).forEach(i -> {
             Mini mini = Mini.builder()
-                    .mbTitle("Title" + i)
-                    .mbContent("content" + i)
+                    .mbTitle("제목" + i + i + i)
+                    .mbContent("내용" + i + i + i)
                     .mbWriter("email"+i+"@naver.com")
                     .build();
             miniMapper.insert(mini);

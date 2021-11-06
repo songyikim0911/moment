@@ -1,4 +1,5 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib uri = "http://java.sun.com/jsp/jstl/fmt" prefix = "fmt" %>
 <%@include file="../includes/header.jsp"%>
 
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
@@ -59,7 +60,10 @@
                                                     <tr>
                                                         <td><a href="javascript:moveRead(${dto.qnaId})"><c:out value="${dto.qnaTitle}"></c:out></a></td>
 <%--                                                        <td><c:out value="${dto.qnaWriter}"></c:out></td>--%>
-                                                        <td><c:out value="${dto.qnaRegDate}"></c:out></td>
+                                                        <td>
+                                                            <fmt:parseDate value="${dto.qnaRegDate}" pattern="yyyy-MM-dd'T'HH:mm:ss" var="parsedDateTime" type="both" />
+                                                            <fmt:formatDate pattern="yyyy-MM-dd" value="${parsedDateTime}"/>
+                                                        </td>
                                                         <td><c:out value="${dto.qnaWriter}"></c:out></td>
                                                     </tr>
                                                     </c:forEach>

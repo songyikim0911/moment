@@ -78,6 +78,7 @@ public class CustomUserDetailsService implements UserDetailsService {
         MemberRole memberRole = joinDTO.getRole(memId);
         log.info("----CustomUserDetailsService register  insert(memberRole)");
         log.info("----CustomUserDetailsService register insert(memberRole)");
+
         memberMapper.insertRole(memberRole);
         log.info(memberRole);
         return member.getMemId();

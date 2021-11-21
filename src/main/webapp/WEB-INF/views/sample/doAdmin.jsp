@@ -10,7 +10,6 @@
   <h1>DO ADMIN</h1>
 
   <h2><sec:authentication property="principal"></sec:authentication></h2>
-  <h2><sec:authentication property="principal.memName"></sec:authentication></h2>
   <h2><sec:authentication property="principal.memId"></sec:authentication></h2>
   <h2><sec:authentication property="principal.memPwd"></sec:authentication></h2>
 

@@ -22,6 +22,7 @@ public class CustomLoginSuccessHandler implements AuthenticationSuccessHandler {
         log.warn("------CustomLoginSuccessHandler------");
         log.warn("------CustomLoginSuccessHandler------");
 
+        response.sendRedirect("/index.jsp");
 
     }
 }

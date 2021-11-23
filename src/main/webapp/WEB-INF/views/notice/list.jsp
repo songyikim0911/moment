@@ -1,3 +1,4 @@
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@include file="../includes/header.jsp" %>
 
@@ -35,8 +36,10 @@
                             <div class="card-header">
                                 <h3 class="card-title">목록</h3>
                                 <div align="right">
+                                    <sec:authorize access="isAuthenticated()">
                                     <button class="btn btn-outline-primary"><a href="/notice/write">게시글등록</a></button>
-                                </div>
+                                    </sec:authorize>
+                                        </div>
                             </div>
 
                             <!-- /.card-header -->

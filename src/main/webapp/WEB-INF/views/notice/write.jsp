@@ -1,5 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@include file="../includes/header.jsp"%>
+<%@ taglib uri="http://www.springframework.org/security/tags" prefix="sec" %>
 
 
 

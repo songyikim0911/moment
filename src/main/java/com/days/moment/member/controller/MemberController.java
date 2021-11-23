@@ -64,7 +64,7 @@ public class MemberController {
 
     }
 
-    @PreAuthorize("permitAll()")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping("/list")
     public void getList(PageRequestDTO pageRequestDTO, Model model){
 
